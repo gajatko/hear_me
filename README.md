@@ -9,6 +9,9 @@ Oto mały programik, który generuje ścieżki audio z pewnymi dźwiękami. Zada
 Paczki
 
 api - kontroler Springowy
+
 audio - do generowania plików wav z MIDI (kod pożyczony z jFugue)
+
 training.tests - core'owa logika testów
+
 training.generators - generowanie losowych nut
