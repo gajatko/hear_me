@@ -1,6 +1,6 @@
 # yacek_kotlin
 
-jFugue library is required. To compile locally, run jfugue/install-jfugue.sh.
+jFugue 5.x library is required which cannot be found in an on-line repo. So, to compile run jfugue/install-jfugue.sh first.
 
 [polish mode on]
 
