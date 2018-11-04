@@ -1,6 +1,6 @@
 # yacek_kotlin
 
-To compile successfully, jFugue has to be installed in local maven repository (the recent version is not uploaded to any on-line repository). Just run jfugue/install-jfugue.sh once.
+jFugue library is required. To compile locally, run jfugue/install-jfugue.sh.
 
 [polish mode on]
 
