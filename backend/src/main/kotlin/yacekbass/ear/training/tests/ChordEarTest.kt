@@ -3,6 +3,7 @@ package yacekbass.ear.training.tests
 import org.jfugue.pattern.Pattern
 import org.jfugue.theory.Chord
 import org.springframework.stereotype.Service
+import yacekbass.ear.clientmodel.TestQuestion
 import yacekbass.ear.training.generators.IRandomMusicProvider
 
 @Service
