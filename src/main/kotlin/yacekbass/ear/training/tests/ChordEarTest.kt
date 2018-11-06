@@ -17,7 +17,8 @@ class ChordEarTest(private val randomMusicProvider: IRandomMusicProvider) : EarT
         val rootNote = randomMusicProvider.nextNote() // eg. "C3"
         val chordName = randomMusicProvider.nextFromList(activeOptions) // "MAJ"
         val chord = Chord(rootNote, Chord.chordMap[chordName]) // "C3MAJ"
-        return TestQuestion(possibleAnswers = activeOptions,
+        return TestQuestion(
+                possibleAnswers = activeOptions,
                 audioPattern = Pattern(chord).applyCommonConfig(config).toString(),
                 correctAnswer = chordName
         )
