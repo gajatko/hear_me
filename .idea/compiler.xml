@@ -6,8 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="hear_me" />
+        <module name="ear-backend" />
+        <module name="ear-frontend" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ear" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
