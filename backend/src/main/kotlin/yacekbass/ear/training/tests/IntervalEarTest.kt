@@ -31,7 +31,7 @@ class IntervalEarTest (private val randomMusicProvider : IRandomMusicProvider) :
     }
 
     override fun defaultConfig(): Map<String, String> {
-        val config = mutableMapOf(*allIntervals.map { i -> i to "false" }.toTypedArray())
+        val config = linkedMapOf(*allIntervals.map { i -> i to "false" }.toTypedArray())
         listOf("1", "b3", "3", "5", "8").forEach {
             intervalActiveByDefault -> config[intervalActiveByDefault] = "true"
         }

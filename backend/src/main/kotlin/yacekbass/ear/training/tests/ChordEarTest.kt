@@ -26,7 +26,7 @@ class ChordEarTest(private val randomMusicProvider: IRandomMusicProvider) : EarT
     }
 
     override fun defaultConfig(): Map<String, String> {
-        val config = mutableMapOf(*allChords.map { i -> i to "false" }.toTypedArray())
+        val config = linkedMapOf(*allChords.map { i -> i to "false" }.toTypedArray())
         listOf("MAJ", "MIN", "D7", "AUG", "DIM").forEach {
             chordActiveByDefault -> config[chordActiveByDefault] = "true"
         }

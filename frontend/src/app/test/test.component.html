@@ -1,5 +1,13 @@
 <p>
-  <button (click)="loadQuestion()" >Next question</button>
+  <button (click)="loadQuestion()">Next question</button>
+  {{ msg$ | async }}
+</p>
+  <div *ngFor="let entry of (config$ | async)?.entries()">
+  <div>
+    {{ entry }}
+  </div>
+</div>
+<p>
   <audio id="audioElement">
     <source src="" id="sourceElement"/>
   </audio>
