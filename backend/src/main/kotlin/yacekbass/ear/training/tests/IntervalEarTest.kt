@@ -3,6 +3,7 @@ package yacekbass.ear.training.tests
 import org.jfugue.pattern.Pattern
 import org.jfugue.theory.Intervals
 import org.springframework.stereotype.Service
+import yacekbass.ear.training.ConfigEntry
 import yacekbass.ear.clientmodel.TestQuestion
 import yacekbass.ear.training.generators.IRandomMusicProvider
 
@@ -13,8 +14,8 @@ class IntervalEarTest (private val randomMusicProvider : IRandomMusicProvider) :
 
     override val name: String = "intervals"
 
-    override fun nextQuestion(config: Map<String, String>): TestQuestion {
-        val activeOptions = allIntervals.filter { interval -> config[interval] == "true" }
+    override fun nextQuestion(config: Map<String, ConfigEntry>): TestQuestion {
+        val activeOptions = allIntervals.filter { interval -> config[interval]?.value == "true" }
         if (activeOptions.isEmpty()) {
             throw IllegalArgumentException("At least one interval must be active.")
         }
@@ -30,12 +31,16 @@ class IntervalEarTest (private val randomMusicProvider : IRandomMusicProvider) :
         )
     }
 
-    override fun defaultConfig(): Map<String, String> {
-        val config = linkedMapOf(*allIntervals.map { i -> i to "false" }.toTypedArray())
+    override fun defaultConfig(): Map<String, ConfigEntry> {
+        val config = mutableMapOf(
+                *allIntervals.map { i -> i to ConfigEntry("false", "boolean") }
+                        .toTypedArray())
         listOf("1", "b3", "3", "5", "8").forEach {
-            intervalActiveByDefault -> config[intervalActiveByDefault] = "true"
+            intervalActiveByDefault -> config[intervalActiveByDefault]?.value = "true"
         }
         config.putAll(commonConfig)
         return config
     }
 }
+
+

@@ -163,9 +163,9 @@
                 </executions>
                 <configuration>
                     <jsonLibrary>jackson2</jsonLibrary>
-                    <classes>
-                        <class>yacekbass.ear.clientmodel.TestQuestion</class>
-                    </classes>
+                    <classPatterns>
+                        <classPattern>yacekbass.ear.clientmodel.*</classPattern>
+                    </classPatterns>
                     <outputFile>../frontend/src/app/endpoints.d.ts</outputFile>
                     <outputKind>global</outputKind>
                 </configuration>

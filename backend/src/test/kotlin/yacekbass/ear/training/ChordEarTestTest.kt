@@ -3,12 +3,11 @@ package yacekbass.ear.training
 import org.jfugue.theory.Note
 import org.junit.Assert
 import org.junit.Test
+import yacekbass.ear.clientmodel.TestQuestion
 import yacekbass.ear.training.generators.IRandomMusicProvider
 import yacekbass.ear.training.generators.RandomMusicProvider
 import yacekbass.ear.training.tests.ChordEarTest
-import yacekbass.ear.training.tests.INSTRUMENT_CONFIG_ENTRY
-import yacekbass.ear.training.tests.TEMPO_CONFIG_ENTRY
-import yacekbass.ear.training.tests.commonConfig
+import yacekbass.ear.training.tests.EarTest
 
 class ChordEarTestTest {
 
@@ -20,11 +19,11 @@ class ChordEarTestTest {
             override fun nextFromList(options: List<String>): String = "MAJ"
         })
         val configuration = mapOf(
-                "MAJ" to "true",
-                "MIN" to "true",
-                "AUG" to "false",
-                TEMPO_CONFIG_ENTRY to "400",
-                INSTRUMENT_CONFIG_ENTRY to "Banjo"
+                "MAJ" to ConfigEntry("true", "boolean"),
+                "MIN" to ConfigEntry("true", "boolean"),
+                "AUG" to ConfigEntry("false", "boolean"),
+                "tempo" to ConfigEntry("400", "int"),
+                "instrument" to ConfigEntry("Banjo", "string")
         )
         val q = test.nextQuestion(configuration)
         Assert.assertEquals("T400 I[Banjo] C4MAJ", q.audioPattern)
@@ -32,11 +31,26 @@ class ChordEarTestTest {
         Assert.assertArrayEquals(arrayOf("MAJ", "MIN"), q.possibleAnswers.toTypedArray())
     }
 
+    private fun getConf(): MutableMap<String, ConfigEntry> {
+        val x = object : EarTest{
+            override fun nextQuestion(config: Map<String, ConfigEntry>): TestQuestion =
+                    TODO("not implemented")
+
+            override fun defaultConfig(): Map<String, ConfigEntry> =
+                    TODO("not implemented")
+
+            override val name: String
+                get() = TODO("not implemented")
+
+        }
+        return x.commonConfig.toMutableMap()
+    }
+
     @Test
     fun nextQuestionRandomWithSingleChoice() {
         val test = ChordEarTest(RandomMusicProvider())
-        val config = mutableMapOf(*commonConfig.toTypedArray())
-        config["MIN"] = "true"
+        val config = getConf()
+        config["MIN"] = ConfigEntry("true", "boolean")
         val q = test.nextQuestion(config)
         println("${q.correctAnswer} ${q.audioPattern} ${q.possibleAnswers}")
         Assert.assertEquals("MIN", q.correctAnswer)

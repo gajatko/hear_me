@@ -3,6 +3,7 @@ package yacekbass.ear.training.tests
 import org.jfugue.pattern.Pattern
 import org.jfugue.theory.Chord
 import org.springframework.stereotype.Service
+import yacekbass.ear.training.ConfigEntry
 import yacekbass.ear.clientmodel.TestQuestion
 import yacekbass.ear.training.generators.IRandomMusicProvider
 
@@ -10,8 +11,8 @@ import yacekbass.ear.training.generators.IRandomMusicProvider
 class ChordEarTest(private val randomMusicProvider: IRandomMusicProvider) : EarTest {
     private val allChords = Chord.chordMap.keys.map { k -> k!! }
 
-    override fun nextQuestion(config: Map<String, String>): TestQuestion {
-        val activeOptions = allChords.filter { chord -> config[chord] == "true" }
+    override fun nextQuestion(config: Map<String, ConfigEntry>): TestQuestion {
+        val activeOptions = allChords.filter { chord -> config[chord]?.value == "true" }
         if (activeOptions.isEmpty()) {
             throw IllegalArgumentException("At least one chord type must be active.")
         }
@@ -25,10 +26,11 @@ class ChordEarTest(private val randomMusicProvider: IRandomMusicProvider) : EarT
         )
     }
 
-    override fun defaultConfig(): Map<String, String> {
-        val config = linkedMapOf(*allChords.map { i -> i to "false" }.toTypedArray())
+    override fun defaultConfig(): Map<String, ConfigEntry> {
+        val config = mutableMapOf(
+                *allChords.map { i -> i to ConfigEntry("false", "boolean") }.toTypedArray())
         listOf("MAJ", "MIN", "D7", "AUG", "DIM").forEach {
-            chordActiveByDefault -> config[chordActiveByDefault] = "true"
+            chordActiveByDefault -> config[chordActiveByDefault] = ConfigEntry("true", "boolean")
         }
         config.putAll(commonConfig)
         return config

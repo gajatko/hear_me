@@ -2,9 +2,25 @@
   <button (click)="loadQuestion()">Next question</button>
   {{ msg$ | async }}
 </p>
-  <div *ngFor="let entry of (config$ | async)?.entries()">
-  <div>
-    {{ entry }}
+<div *ngFor="let entry of (configPromise$ | async); let ind = index;">
+  <div *ngIf="entry.confType == 'boolean'">
+    <label>
+      {{ (configPromise$ | async)[ind] }}
+      <input type="checkbox" ngModel="(config$ | async)[ind].confValue" name="booConf-{{ ind }}">
+      {{ entry.confKey }} = {{ entry.confValue }}
+    </label>
+  </div>
+  <div *ngIf="entry.confType == 'int'">
+    <label>
+      {{ entry.confKey }}
+      <input type="number" ngModel="entry.confValue">
+    </label>
+  </div>
+  <div *ngIf="entry.confType == 'string'">
+    <label>
+      <input type="text" ngModel="entry.confValue">
+      {{ entry.confKey }} = {{ entry.confValue }}
+    </label>
   </div>
 </div>
 <p>

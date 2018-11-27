@@ -13,13 +13,14 @@ export class TestComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  public config$: Promise<Map<String, String>> | null = null;
+  public configPromise$: Promise<Array<ConfigMapEntry>> | null = null;
+  public config: Array<ConfigMapEntry> = null;
   public testName: String = 'intervals';
   private resolveConfig: Function|null = null;
 
   ngOnInit() {
     console.log('init');
-    this.config$ = new Promise<Map<String, String>>(resolve => this.resolveConfig = resolve);
+    this.configPromise$ = new Promise<Array<ConfigMapEntry>>(resolve => this.resolveConfig = resolve);
     this.loadConfig();
   }
 
@@ -29,14 +30,15 @@ export class TestComponent implements OnInit {
       .subscribe((value: any) => {
         console.log('Gotcha config: ');
         console.log(value);
-        this.resolveConfig(new Map<String, String>(Object.entries(value)));
+        this.resolveConfig(value);
         console.log('config$ content:');
-        console.log(this.config$);
+        console.log(this.configPromise$);
+        this.config = value;
       });
   }
 
   public loadQuestion() {
-    this.config$.then( config =>
+    this.configPromise$.then(config =>
       this.http.post('http://localhost:8080/ear/test/' + this.testName, config)
         .subscribe(value => {
           this.question = <TestQuestion>value;

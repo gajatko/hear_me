@@ -1,20 +1,21 @@
 package yacekbass.ear.training.tests
 
 import org.jfugue.pattern.Pattern
+import yacekbass.ear.training.ConfigEntry
 
 
-
-fun Pattern.applyCommonConfig(config: Map<String, String>) : Pattern {
-    setTempo((config[TEMPO_CONFIG_ENTRY] ?: DEFAULT_TEMPO).toInt())
-    setInstrument(config[INSTRUMENT_CONFIG_ENTRY] ?: DEFAULT_INSTRUMENT)
+fun Pattern.applyCommonConfig(config: Map<String, ConfigEntry>) : Pattern {
+    setTempo((config["tempo"]?.value ?: DEFAULT_TEMPO).toInt())
+    setInstrument(config["instrument"]?.value ?: DEFAULT_INSTRUMENT)
     return this
 }
 
-const val TEMPO_CONFIG_ENTRY = "tempo"
 const val DEFAULT_TEMPO = "200"
 
-const val INSTRUMENT_CONFIG_ENTRY = "instrument"
 const val DEFAULT_INSTRUMENT = "Piano"
 
-val commonConfig = listOf(TEMPO_CONFIG_ENTRY to DEFAULT_TEMPO, INSTRUMENT_CONFIG_ENTRY to DEFAULT_INSTRUMENT)
+val TEMPO_CONFIG_ENTRY = ConfigEntry(DEFAULT_TEMPO, "int")
+
+val INSTRUMENT_CONFIG_ENTRY = ConfigEntry(DEFAULT_INSTRUMENT, "string")
+
 

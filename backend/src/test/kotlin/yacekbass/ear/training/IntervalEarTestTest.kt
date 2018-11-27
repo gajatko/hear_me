@@ -5,11 +5,10 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import yacekbass.ear.clientmodel.TestQuestion
 import yacekbass.ear.training.generators.IRandomMusicProvider
-import yacekbass.ear.training.tests.INSTRUMENT_CONFIG_ENTRY
+import yacekbass.ear.training.tests.EarTest
 import yacekbass.ear.training.tests.IntervalEarTest
-import yacekbass.ear.training.tests.TEMPO_CONFIG_ENTRY
-import yacekbass.ear.training.tests.commonConfig
 
 class IntervalEarTestTest {
 
@@ -24,11 +23,11 @@ class IntervalEarTestTest {
     @Test
     fun nextQuestionTritone() {
         val test = IntervalEarTest(TestRandom("F4", "b5"))
-        val configuration = mapOf(
-                "3" to "true",
-                "b5" to "true",
-                TEMPO_CONFIG_ENTRY to "500",
-                INSTRUMENT_CONFIG_ENTRY to "Guitar"
+        val configuration = mutableMapOf(
+                "3" to ConfigEntry("true", "boolean"),
+                "b5" to ConfigEntry("true", "boolean"),
+                "tempo" to ConfigEntry("500", "int"),
+                "instrument" to ConfigEntry("Guitar", "String")
         )
         val q = test.nextQuestion(configuration)
         Assert.assertEquals("b5", q.correctAnswer)
@@ -39,7 +38,7 @@ class IntervalEarTestTest {
     @Test
     fun nextQuestionZeroConf() {
         val test = IntervalEarTest(TestRandom("C4", "4"))
-        val configuration = mapOf(*commonConfig.toTypedArray())
+        val configuration = getConf()
         try {
             test.nextQuestion(configuration)
             Assert.fail()
@@ -51,4 +50,19 @@ class IntervalEarTestTest {
 
         override fun nextFromList(options: List<String>): String = interval
     }
+    private fun getConf(): MutableMap<String, ConfigEntry> {
+        val x = object : EarTest{
+            override fun nextQuestion(config: Map<String, ConfigEntry>): TestQuestion =
+                    TODO("not implemented")
+
+            override fun defaultConfig(): Map<String, ConfigEntry> =
+                    TODO("not implemented")
+
+            override val name: String
+                get() = TODO("not implemented")
+
+        }
+        return x.commonConfig.toMutableMap()
+    }
+
 }
