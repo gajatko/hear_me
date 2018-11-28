@@ -1,10 +1,11 @@
 package yacekbass.ear.training.tests
 
+import yacekbass.ear.api.CurrentTestContext
 import yacekbass.ear.training.ConfigEntry
 import yacekbass.ear.clientmodel.TestQuestion
 
 interface EarTest {
-    fun nextQuestion(config: Map<String, ConfigEntry>): TestQuestion
+    fun nextQuestion(config: Map<String, ConfigEntry>, context: CurrentTestContext): TestQuestion
     fun defaultConfig(): Map<String, ConfigEntry>
     val name : String
 

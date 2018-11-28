@@ -1,8 +1,19 @@
 <p>
   {{ msg$ | async }}
   <button (click)="loadQuestion()">Next question</button>
+  <button (click)="loadAudio()">Replay question</button>
   <button (click)="setInputs()">Set inputs</button>
+  <button (click)="restartTest()">Reset</button>
 </p>
+<div *ngIf="this.question != null">
+  <div *ngFor="let answer of question.possibleAnswers as answers; let ind = index">
+    <label>
+    <input type="button" name="ans-{{ ind }}" (click)="postAnswer(answer)">
+      {{ answer }}
+      </label>
+  </div>
+
+</div>
 <div *ngIf="(configPromise$ | async)">
 <div *ngFor="let entry of (configPromise$ | async) as config; let ind = index;">
     <div *ngIf="entry.confType == 'boolean'">

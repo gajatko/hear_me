@@ -3,6 +3,7 @@ package yacekbass.ear.training.tests
 import org.jfugue.pattern.Pattern
 import org.jfugue.theory.Chord
 import org.springframework.stereotype.Service
+import yacekbass.ear.api.CurrentTestContext
 import yacekbass.ear.training.ConfigEntry
 import yacekbass.ear.clientmodel.TestQuestion
 import yacekbass.ear.training.generators.IRandomMusicProvider
@@ -11,7 +12,7 @@ import yacekbass.ear.training.generators.IRandomMusicProvider
 class ChordEarTest(private val randomMusicProvider: IRandomMusicProvider) : EarTest {
     private val allChords = Chord.chordMap.keys.map { k -> k!! }
 
-    override fun nextQuestion(config: Map<String, ConfigEntry>): TestQuestion {
+    override fun nextQuestion(config: Map<String, ConfigEntry>, context: CurrentTestContext): TestQuestion {
         val activeOptions = allChords.filter { chord -> config[chord]?.value == "true" }
         if (activeOptions.isEmpty()) {
             throw IllegalArgumentException("At least one chord type must be active.")

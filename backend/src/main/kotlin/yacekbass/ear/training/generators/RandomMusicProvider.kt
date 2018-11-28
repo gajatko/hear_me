@@ -21,8 +21,10 @@ class RandomMusicProvider : IRandomMusicProvider {
         return Note(noteLetter)
     }
 
-    override fun nextFromList(options : List<String>): String {
+    override fun nextFromList(options: List<String>, distribution: Map<String, Int>): String {
         if (options.isEmpty()) throw IllegalArgumentException("option list must not be empty")
-        return options[random.nextInt(options.size)]
+        val distrbutedOptions: List<String> =
+                distribution.flatMap { (option, cont) -> (0 until cont).map { option } }
+        return distrbutedOptions[random.nextInt(distrbutedOptions.size)]
     }
 }
