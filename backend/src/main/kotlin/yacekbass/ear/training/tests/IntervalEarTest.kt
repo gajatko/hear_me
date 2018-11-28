@@ -17,11 +17,6 @@ class IntervalEarTest (private val randomMusicProvider : IRandomMusicProvider) :
 
     override val name: String = "intervals"
 
-    fun weight(totalAnswers: Int, correctCount: Int) : Int {
-        return totalAnswers - correctCount
-    }
-
-
     override fun nextQuestion(config: Map<String, ConfigEntry>, context: CurrentTestContext): TestQuestion {
         val activeOptions = allIntervals.filter { interval -> config[interval]?.value == "true" }
         if (activeOptions.isEmpty()) {
