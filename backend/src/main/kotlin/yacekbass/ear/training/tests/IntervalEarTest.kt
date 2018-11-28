@@ -3,6 +3,7 @@ package yacekbass.ear.training.tests
 import org.jfugue.pattern.Pattern
 import org.jfugue.theory.Intervals
 import org.springframework.stereotype.Service
+import yacekbass.ear.api.Answer
 import yacekbass.ear.api.CurrentTestContext
 import yacekbass.ear.training.ConfigEntry
 import yacekbass.ear.clientmodel.TestQuestion
@@ -26,20 +27,7 @@ class IntervalEarTest (private val randomMusicProvider : IRandomMusicProvider) :
         if (activeOptions.isEmpty()) {
             throw IllegalArgumentException("At least one interval must be active.")
         }
-        val distributionFromHistory: Map<String, Int> =
-                context.answerHistory
-                        .filter { a -> !a.isCorrect }
-                        .flatMap { a -> listOf(a.correctAnswer to 3, a.userAnswer to 2) }
-                        .groupBy { (answer, _) -> answer }
-                        .map { (answer, ones) -> answer to ones.size }
-                        .toMap()
-        val INITIAL_DISTR_VALUE = 2
-        val distribution: MutableMap<String, Int> = randomMusicProvider.defaultDistribution(activeOptions)
-                .mapValues { INITIAL_DISTR_VALUE + ceil(Math.pow(context.answerHistory.size.toDouble(), 0.8)).toInt() }
-                .toMutableMap()
-        distributionFromHistory.forEach {
-            (answer, weight) -> distribution[answer] = (distribution[answer] ?: 0) + weight
-        }
+        val distribution: MutableMap<String, Int> = calculateDistribution(context.answerHistory, activeOptions)
 
         log(context, distribution)
 
@@ -52,6 +40,23 @@ class IntervalEarTest (private val randomMusicProvider : IRandomMusicProvider) :
                 audioPattern = Pattern(intervalMusicText).applyCommonConfig(config).toString(),
                 correctAnswer = intervalString
         )
+    }
+
+    private fun calculateDistribution(answerHistory: List<Answer>, activeOptions: List<String>): MutableMap<String, Int> {
+        val distributionFromHistory = answerHistory
+                .filter { a -> !a.isCorrect }
+                .flatMap { a -> listOf(a.correctAnswer to 3, a.userAnswer to 2) }
+                .groupBy { (answer, _) -> answer }
+                .map { (answer, ones) -> answer to ones.size }
+                .toMap()
+        val INITIAL_DISTR_VALUE = 2
+        val distribution = randomMusicProvider.defaultDistribution(activeOptions)
+                .mapValues { INITIAL_DISTR_VALUE + ceil(Math.pow(answerHistory.size.toDouble(), 0.8)).toInt() }
+                .toMutableMap()
+        distributionFromHistory.forEach { (answer, weight) ->
+            distribution[answer] = (distribution[answer] ?: 0) + weight
+        }
+        return distribution
     }
 
     private fun log(context: CurrentTestContext, distribution: MutableMap<String, Int>) {
