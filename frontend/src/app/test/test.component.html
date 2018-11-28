@@ -1,27 +1,28 @@
 <p>
-  <button (click)="loadQuestion()">Next question</button>
   {{ msg$ | async }}
+  <button (click)="loadQuestion()">Next question</button>
+  <button (click)="setInputs()">Set inputs</button>
 </p>
-<div *ngFor="let entry of (configPromise$ | async); let ind = index;">
-  <div *ngIf="entry.confType == 'boolean'">
-    <label>
-      {{ (configPromise$ | async)[ind] }}
-      <input type="checkbox" ngModel="(config$ | async)[ind].confValue" name="booConf-{{ ind }}">
-      {{ entry.confKey }} = {{ entry.confValue }}
-    </label>
-  </div>
-  <div *ngIf="entry.confType == 'int'">
-    <label>
-      {{ entry.confKey }}
-      <input type="number" ngModel="entry.confValue">
-    </label>
-  </div>
-  <div *ngIf="entry.confType == 'string'">
-    <label>
-      <input type="text" ngModel="entry.confValue">
-      {{ entry.confKey }} = {{ entry.confValue }}
-    </label>
-  </div>
+<div *ngIf="(configPromise$ | async)">
+<div *ngFor="let entry of (configPromise$ | async) as config; let ind = index;">
+    <div *ngIf="entry.confType == 'boolean'">
+      <label>
+        <input type="checkbox" ngModel="config[ind].confValue" name="conf-{{ ind }}">
+        {{ entry.confKey }}
+      </label>
+    </div>
+    <div *ngIf="entry.confType == 'int'">
+      <label>
+        {{ entry.confKey }}:
+        <input type="number" ngModel="entry.confValue" name="conf-{{ ind }}">
+      </label>
+    </div>
+    <div *ngIf="entry.confType == 'string'">
+      <label>
+        {{ entry.confKey }}:
+        <input type="text" ngModel="config[ind].confValue" name="conf-{{ ind }}">
+      </label>
+ </div>   </div>
 </div>
 <p>
   <audio id="audioElement">

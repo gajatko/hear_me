@@ -33,7 +33,7 @@ class EarTrainingController constructor (val tests : Array<EarTest>, val midi2Wa
     fun test(@PathVariable("test_name") testName: String, @RequestBody config: List<ConfigMapEntry>):
             TestQuestion {
         val test = tests.single { t -> t.name == testName }
-        val conf = config.map { entry -> entry.confKey to ConfigEntry(entry.confValue, entry.confType) }.toMap()
+        val conf = config.map { entry -> entry.confKey to ConfigEntry(entry.confValue.toString(), entry.confType) }.toMap()
         return test.nextQuestion(conf)
     }
 
@@ -41,7 +41,7 @@ class EarTrainingController constructor (val tests : Array<EarTest>, val midi2Wa
     fun getConfig(@PathVariable("test_name") testName : String): List<ConfigMapEntry> {
         val test = tests.single { t -> t.name == testName }
         return test.defaultConfig().entries
-                .map { entry -> ConfigMapEntry(entry.key, entry.value.value, entry.value.type) }
+                .map { entry -> ConfigMapEntry.buildConfigMapEntry(entry.key, entry.value) }
     }
 
     @PostMapping("/audio")

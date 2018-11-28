@@ -1,6 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-test',
@@ -8,15 +7,23 @@ import {Observable} from 'rxjs';
   styleUrls: ['./test.component.css']
 })
 export class TestComponent implements OnInit {
+
+  constructor(private http: HttpClient) { }
   private question: TestQuestion;
   @ViewChild('audioOption') audioPlayerRef: ElementRef;
 
-  constructor(private http: HttpClient) { }
-
   public configPromise$: Promise<Array<ConfigMapEntry>> | null = null;
-  public config: Array<ConfigMapEntry> = null;
   public testName: String = 'intervals';
   private resolveConfig: Function|null = null;
+  private static playWave(byteArray: ArrayBuffer) {
+    const blob = new Blob([byteArray], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const audio = document.getElementById('audioElement') as HTMLAudioElement;
+    const source = document.getElementById('sourceElement') as HTMLSourceElement;
+    source.src = url;
+    audio.load();
+    audio.play().then();
+  }
 
   ngOnInit() {
     console.log('init');
@@ -31,13 +38,46 @@ export class TestComponent implements OnInit {
         console.log('Gotcha config: ');
         console.log(value);
         this.resolveConfig(value);
-        console.log('config$ content:');
-        console.log(this.configPromise$);
-        this.config = value;
       });
+  }
+  public readInputs() {
+    this.forInputs((element, entry) => {
+      if (entry.confType === 'boolean') {
+        entry.confValue = element.checked;
+      } else {
+        entry.confValue = element.value;
+      }
+    });
+  }
+  public setInputs() {
+    this.forInputs((element, entry) => {
+      if (entry.confType === 'boolean') {
+        element.checked = entry.confValue;
+      } else {
+        element.value = entry.confValue;
+      }
+    });
+  }
+
+
+  public forInputs(op: (inputElement: HTMLInputElement, configEntry: ConfigMapEntry) => void) {
+    this.configPromise$.then(config => {
+      for (let i = 0; i < config.length; i++) {
+        const entry = config[i];
+        const name = 'conf-' + i;
+        const element = <HTMLInputElement>document.getElementsByName(name)[0];
+        op(element, entry);
+        if (entry.confType === 'boolean') {
+          element.checked = entry.confValue;
+        } else {
+          element.value = entry.confValue;
+        }
+      }
+    });
   }
 
   public loadQuestion() {
+    this.readInputs();
     this.configPromise$.then(config =>
       this.http.post('http://localhost:8080/ear/test/' + this.testName, config)
         .subscribe(value => {
@@ -53,16 +93,7 @@ export class TestComponent implements OnInit {
     } else {
       this.http.post('http://localhost:8080/ear/audio',
         this.question.audioPattern, { responseType: 'arraybuffer' })
-        .subscribe(wavBytes => this.playWave(wavBytes));
+        .subscribe(wavBytes => TestComponent.playWave(wavBytes));
     }
-  }
-  private playWave(byteArray: ArrayBuffer) {
-    const blob = new Blob([byteArray], { type: 'audio/wav' });
-    const url = URL.createObjectURL(blob);
-    const audio = document.getElementById('audioElement') as HTMLAudioElement;
-    const source = document.getElementById('sourceElement') as HTMLSourceElement;
-    source.src = url;
-    audio.load();
-    audio.play();
   }
 }
