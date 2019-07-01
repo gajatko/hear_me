@@ -8,7 +8,11 @@ class GraphicsConfigurer(val svg: Graphics2D, val config: SpacingConfig) {
 
     fun staffLine()
     {
-        svg.stroke = BasicStroke(config.staffLineWidth.toFloat())
+        svg.stroke = BasicStroke(config.staffLineWidth)
         svg.paint = Color.BLACK
+    }
+
+    fun background() {
+        svg.background = Color.WHITE
     }
 }

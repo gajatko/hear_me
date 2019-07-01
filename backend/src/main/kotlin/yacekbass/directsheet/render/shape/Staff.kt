@@ -1,60 +1,18 @@
 package yacekbass.directsheet.render.shape
 
-import java.awt.geom.AffineTransform
-import java.awt.geom.PathIterator
-import java.awt.geom.Rectangle2D
-import java.awt.geom.RectangularShape
+import java.awt.geom.Path2D
 
-class Staff : RectangularShape() {
-    override fun contains(x: Double, y: Double): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class Staff(x : Float, y : Float, length: Float, val lineCount : Int, val staffLineSep : Float) : Path2DDelegatingShape() {
 
-    override fun contains(x: Double, y: Double, w: Double, h: Double): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    private val lines : Path2D.Float = Path2D.Float()
+    override val path2D: Path2D = lines
 
-    override fun getBounds2D(): Rectangle2D {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getX(): Double {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getHeight(): Double {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getY(): Double {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun isEmpty(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getPathIterator(at: AffineTransform?): PathIterator {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getWidth(): Double {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun intersects(x: Double, y: Double, w: Double, h: Double): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun setFrame(x: Double, y: Double, w: Double, h: Double) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    fun Staff(xPos: kotlin.Float, yPos: kotlin.Float, length: kotlin.Float, lineCount: Int) {
-        super.x = xPos
-        super.y = yPos
-        super.width = length
-        super.height
+    init {
+        for (i in 1..lineCount) {
+            val lineY = y + (i-1) * staffLineSep
+            lines.moveTo(x, lineY)
+            lines.lineTo(x + length, lineY)
+        }
     }
 
 }
