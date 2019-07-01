@@ -2,7 +2,7 @@ package yacekbass.directsheet.render.shape
 
 import java.awt.geom.Path2D
 
-class Note(staff: Staff, xPos : Float, lineNumber : Int) : Path2DDelegatingShape() {
+class NoteTextShape(staff: StaffShape, xPos : Float, lineNumber : Int) : Path2DDelegatingShape() {
 
     private val lines : Path2D.Float = Path2D.Float()
     override val path2D: Path2D = lines

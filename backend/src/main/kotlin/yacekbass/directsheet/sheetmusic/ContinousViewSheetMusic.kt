@@ -13,7 +13,8 @@ class ContinousViewSheetMusic(w: Int, h: Int) {
     fun draw()
     {
         val staff = g.drawStaff(10f, 10f, 180f, 5)
-        g.drawNote(staff, 0f, 0)
+        g.drawNoteFont(staff, 10f, 2)
+        g.drawNoteFont(staff, 0f, 5)
 
 
         val element = svg.getSVGElement("music")
