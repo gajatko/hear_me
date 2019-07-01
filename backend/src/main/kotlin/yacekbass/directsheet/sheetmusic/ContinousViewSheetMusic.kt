@@ -15,10 +15,14 @@ class ContinousViewSheetMusic(w: Int, h: Int) {
         val staff = g.drawStaff(10f, 100f, 800f, 4)
         var x = 0f
         for (i in 0..25) {
-            x += if (i % 2 == 0)
-                30f
-            else
-                15f
+            if (i % 2 == 0) {
+                g.currentNoteType = "÷"
+                x += 30f
+            }
+            else {
+                g.currentNoteType = "w"
+                x += 15f
+            }
             val n = i - 5
             g.drawNote(staff, x, n)
         }

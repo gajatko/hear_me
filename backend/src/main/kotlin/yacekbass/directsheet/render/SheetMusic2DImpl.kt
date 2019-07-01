@@ -1,6 +1,6 @@
 package yacekbass.directsheet.render
 
-import yacekbass.directsheet.render.shape.NoteShape
+import yacekbass.directsheet.render.shape.NoteBounds
 import yacekbass.directsheet.render.shape.StaffShape
 import java.awt.Graphics2D
 import java.awt.geom.Path2D
@@ -9,7 +9,7 @@ open class SheetMusic2DImpl(private val g: Graphics2D) : SheetMusic2D(g) {
 
     private val spacing : SpacingConfig = SpacingConfig()
     private val c : GraphicsConfigurer = GraphicsConfigurer(g, spacing)
-    private val sep = spacing.staffLineSep
+    var currentNoteType = "w"
 
     init {
         c.background()
@@ -18,7 +18,7 @@ open class SheetMusic2DImpl(private val g: Graphics2D) : SheetMusic2D(g) {
     }
 
     override fun drawStaff(x : Float, y : Float, length: Float, lineCount : Int) : StaffShape {
-        val staff = StaffShape(x, y, length, lineCount, sep)
+        val staff = StaffShape(x, y, length, lineCount, spacing.staffLineSep)
         g.draw(staff)
         return staff
     }
@@ -42,17 +42,17 @@ open class SheetMusic2DImpl(private val g: Graphics2D) : SheetMusic2D(g) {
     }
 
     override fun drawNote(staff : StaffShape, xpos: Float, lineNumber: Int) {
-        val note = NoteShape(staff, xpos, lineNumber)
-        val ledgerLineX = staff.bounds2D.x.toFloat() + xpos - 0.1f * sep
+        val note = NoteBounds(staff, xpos, lineNumber)
+        val ledgerLineX = staff.bounds2D.x.toFloat() + xpos - 0.1f * staff.staffLineSep
         if (lineNumber < -1) {
             drawLedgerLinesAbove(staff, ledgerLineX,
-                    spacing.ledgerLineWidth,
+                    staff.ledgerLineWidth,
                     -lineNumber / 2)
         } else if (lineNumber >= staff.lineCount * 2 - 2) {
             drawLedgerLinesBelow(staff, ledgerLineX,
-                    spacing.ledgerLineWidth,
+                    staff.ledgerLineWidth,
                     (lineNumber - staff.lineCount * 2 + 2) / 2)
         }
-        g.drawString("w", note.bounds2D.x.toFloat(), note.bounds2D.y.toFloat())
+        g.drawString(currentNoteType, note.x, note.y)
     }
 }

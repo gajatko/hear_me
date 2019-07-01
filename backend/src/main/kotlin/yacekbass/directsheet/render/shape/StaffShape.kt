@@ -6,6 +6,7 @@ class StaffShape(x : Float, y : Float, length: Float, val lineCount : Int, val s
 
     private val lines : Path2D.Float = Path2D.Float()
     override val path2D: Path2D = lines
+    val ledgerLineWidth = staffLineSep * 1.85f
 
     init {
         for (i in 1..lineCount) {
