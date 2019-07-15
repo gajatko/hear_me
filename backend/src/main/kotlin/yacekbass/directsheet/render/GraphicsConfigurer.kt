@@ -12,11 +12,11 @@ class GraphicsConfigurer(val g: Graphics2D, val config: SpacingConfig) {
 
     init {
         val inputStream = javaClass
-                .classLoader.getResourceAsStream("pgmus.ttf")
+                .classLoader.getResourceAsStream("emmentaler.ttf")
         musicFont = Font.createFont(TRUETYPE_FONT, inputStream)
     }
 
-    fun staffLine()
+    fun basicStroke()
     {
         g.stroke = BasicStroke(config.staffLineWidth)
         g.paint = Color.BLACK

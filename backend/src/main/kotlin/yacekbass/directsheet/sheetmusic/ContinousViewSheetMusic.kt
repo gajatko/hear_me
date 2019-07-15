@@ -1,6 +1,7 @@
 package yacekbass.directsheet.sheetmusic;
 
 import org.jfree.graphics2d.svg.SVGGraphics2D
+import yacekbass.directsheet.render.FontChars
 import yacekbass.directsheet.render.SheetMusic2DImpl
 import java.io.FileWriter
 import java.nio.file.Files
@@ -12,19 +13,25 @@ class ContinousViewSheetMusic(w: Int, h: Int) {
 
     fun draw()
     {
-        val staff = g.drawStaff(10f, 100f, 800f, 4)
+        val staff = g.drawStaff(10f, 100f, 800f, 5)
         var x = 0f
+        g.currentSymbol = FontChars.G_CLEF
+        g.drawSymbol(staff, x, 6)
+        x+=30f
+        g.currentSymbol = FontChars.C_CLEF
+        g.drawSymbol(staff, x, 4)
+        x+=30f
         for (i in 0..25) {
             if (i % 2 == 0) {
-                g.currentNoteType = "÷"
+                g.currentSymbol = FontChars.WHOLE_NOTE
                 x += 30f
             }
             else {
-                g.currentNoteType = "w"
+                g.currentSymbol = FontChars.QUARTER_NOTE
                 x += 15f
             }
             val n = i - 5
-            g.drawNote(staff, x, n)
+            g.drawSymbol(staff, x, n)
         }
 
 
