@@ -27,7 +27,7 @@ open class SheetMusic2DImpl(private val g: Graphics2D) : SheetMusic2D(g) {
     }
 
     override fun drawSymbol(staff : StaffShape, symbol: FontChars, xpos: Float, lineNumber: Int): Shape {
-        val symbolBounds = staff.symbolBounds(xpos, lineNumber)
+        val symbolBounds = staff.symbolLocation(xpos, lineNumber)
         val font = when {
             symbol.sizeFix != null -> g.font.deriveFont(staff.bounds2D.height.toFloat() * symbol.sizeFix)
             else -> g.font.deriveFont(staff.bounds2D.height.toFloat())

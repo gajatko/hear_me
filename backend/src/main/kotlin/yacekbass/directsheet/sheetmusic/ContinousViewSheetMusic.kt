@@ -1,9 +1,8 @@
 package yacekbass.directsheet.sheetmusic;
 
 import org.jfree.graphics2d.svg.SVGGraphics2D
-import yacekbass.directsheet.render.FontChars
 import yacekbass.directsheet.render.SheetMusic2DImpl
-import yacekbass.directsheet.render.shape.BarLineDrawer
+import yacekbass.directsheet.render.drawer.BarLineDrawer
 import java.io.FileWriter
 import java.nio.file.Files
 
@@ -16,13 +15,13 @@ class ContinousViewSheetMusic(w: Int, h: Int) {
     {
         val staff = g.drawStaff(10f, 100f, 800f, 5)
         var x = 0f
-        g.drawSymbol(staff, FontChars.G_CLEF, x, 6)
-        x+=30f
-        g.drawSymbol(staff, FontChars.C_CLEF, x, 4)
+//        g.drawSymbol(staff, FontChars.G_CLEF, x, 6)
+//        x+=30f
+//        g.drawSymbol(staff, FontChars.C_CLEF, x, 4)
 //        g.color = Color.BLUE
-        x+=30f
-        x+=30f
-        x+=30f
+//        x+=30f
+//        x+=30f
+//        x+=30f
         g.accept(BarLineDrawer(staff, x, BarLineDrawer.repeatStart()))
         x += 30f
         g.accept(BarLineDrawer(staff, x, BarLineDrawer.repeatEnd()))
@@ -33,9 +32,9 @@ class ContinousViewSheetMusic(w: Int, h: Int) {
         x += 30f
         g.accept(BarLineDrawer(staff, x, BarLineDrawer.pieceEnd()))
         x += 30f
-        g.accept(BarLineDrawer(staff, x, listOf(BarLineDrawer.BarLineStyle.RepeatDots, BarLineDrawer.BarLineStyle.RepeatDots)))
+        g.accept(BarLineDrawer(staff, x, listOf(BarLineDrawer.BarLineStyle.Dots)))
         x += 30f
-        g.accept(BarLineDrawer(staff, x, listOf(BarLineDrawer.BarLineStyle.RepeatDots, BarLineDrawer.BarLineStyle.Thin, BarLineDrawer.BarLineStyle.RepeatDots)))
+        g.accept(BarLineDrawer(staff, x, listOf(BarLineDrawer.BarLineStyle.Dashes)))
         x += 30f
         val element = svg.getSVGElement("music")
         System.out.println(Some.prettyPrint(element))

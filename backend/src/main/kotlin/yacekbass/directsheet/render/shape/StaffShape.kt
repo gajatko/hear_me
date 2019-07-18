@@ -2,6 +2,7 @@ package yacekbass.directsheet.render.shape
 
 import java.awt.geom.Line2D
 import java.awt.geom.Path2D
+import java.awt.geom.Point2D
 import java.awt.geom.Rectangle2D
 
 class StaffShape(x : Float, y : Float, length: Float, val lineCount : Int, val staffLineSep : Float)
@@ -17,6 +18,14 @@ class StaffShape(x : Float, y : Float, length: Float, val lineCount : Int, val s
             lines.lineTo(x + length, lineY)
         }
     }
+    /**
+     * Returns a target center point for a symbol to draw on a specific line on this staff and relative x-coordinate.
+     */
+    fun symbolLocation(relativeXpos: Float, lineNumber: Int): Point2D.Float {
+        val x = (bounds2D.x + relativeXpos).toFloat()
+        val y = (bounds2D.y + lineNumber * (staffLineSep / 2f)).toFloat()
+        return Point2D.Float(x, y)
+    }
 
     /**
      * Returns a target rectangle for a symbol to draw on a specific line on this staff and relative x-coordinate.
@@ -24,7 +33,7 @@ class StaffShape(x : Float, y : Float, length: Float, val lineCount : Int, val s
      */
     fun symbolBounds(relativeXpos: Float, lineNumber: Int): Rectangle2D.Float {
         val x = (bounds2D.x + relativeXpos).toFloat()
-        val y = (bounds2D.y + lineNumber * (staffLineSep / 2f)).toFloat()
+        val y = (bounds2D.y + (lineNumber - 1) * (staffLineSep / 2f)).toFloat()
         val height = staffLineSep
         return Rectangle2D.Float(x, y, height, height)
     }
@@ -70,7 +79,7 @@ class StaffShape(x : Float, y : Float, length: Float, val lineCount : Int, val s
     }
 
     /**
-     * Returns a path representing a single vertical line across all staff lines, at a specified x-coordinate
+     * Returns a single vertical line across all staff lines, at a specified relative x-coordinate
      */
     fun barLine(relativeXpos: Float): Line2D.Float {
         return Line2D.Float(bounds2D.x.toFloat() + relativeXpos,

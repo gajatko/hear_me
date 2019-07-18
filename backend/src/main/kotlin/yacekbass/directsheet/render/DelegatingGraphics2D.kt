@@ -12,6 +12,10 @@ import java.awt.image.renderable.RenderableImage
 import java.text.AttributedCharacterIterator
 import kotlin.math.roundToInt
 
+/**
+ * A graphics 2D pseudo-implementation which passess all method calls
+ * to an underlying implementation.
+ */
 open class DelegatingGraphics2D(private val graphics : Graphics2D) : Graphics2D() {
 
     override fun getClipBounds(): Rectangle {
